@@ -1,10 +1,10 @@
 import type { Site, SocialObjects } from "./types";
 
 export const SITE: Site = {
-  website: "https://abhizeet.com", // replace this with your deployed domain
+  website: "https://abhijeet.github.io", // replace this with your deployed domain
   author: "Abhijeet Yadav",
-  profile: "https://satnaing.dev/",
-  desc: "A minimal, responsive and SEO-friendly Astro blog theme.",
+  profile: "https://abhizeet.com",
+  desc: "abhizeet, Learn DevOps.",
   title: "abhizeet",
   ogImage: "astropaper-og.jpg",
   lightAndDarkMode: true,
@@ -13,7 +13,7 @@ export const SITE: Site = {
   scheduledPostMargin: 15 * 60 * 1000, // 15 minutes
   showArchives: false,
   editPost: {
-    url: "https://github.com/satnaing/astro-paper/edit/main/src/content/blog",
+    url: "https://github.com/abhizeetyadav/abhijeet.github.io/edit/main/src/content/blog",
     text: "Suggest Changes",
     appendFilePath: true,
   },
