@@ -329,6 +329,10 @@ Followed this  doc:
 [yugabyted reference](https://docs.yugabyte.com/preview/reference/configuration/yugabyted/)
 
 
+Reference of this post: <br>
+[Youtube Video] https://www.youtube.com/watch?v=VdF1tKfDnQ0
+
+
 
 
 

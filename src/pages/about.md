@@ -1,36 +1,36 @@
 ---
 layout: ../layouts/AboutLayout.astro
 title: "About"
+tags: 
+  - portfolio
+  - aboutme
 ---
 
-AstroPaper is a minimal, responsive and SEO-friendly Astro blog theme. I designed and crafted this based on [my personal blog](https://satnaing.dev/blog).
+## DevOps Learner 
 
-This theme is aimed to be accessible out of the box. Light and dark mode are supported by
-default and additional color schemes can also be configured.
+Welcome to my About page! I am a passionate DevOps Engineer with a strong interest in automation, CI/CD pipelines, containerization, and cloud infrastructure. My goal is to bridge the gap between development and operations by implementing scalable and efficient solutions.
 
-This theme is self-documented \_ which means articles/posts in this theme can also be considered as documentations. So, see the documentation for more info.
+### Skills & Expertise
+- **Automation & Scripting:** Bash, Python
+- **CI/CD Pipelines:** Jenkins, GitHub Actions, GitLab CI/CD
+- **Containerization:** Docker, Kubernetes (k3s)
+- **Cloud Platforms:** AWS (EC2, S3, CloudFormation, Lambda, CloudWatch)
+- **Infrastructure as Code (IaC):** Terraform, Ansible
+- **Monitoring & Logging:** Prometheus, Grafana, Loki, Fluentd, ELK Stack
+- **Version Control:** Git, AWS CodeCommit
+- **Security & Networking:** VPC, IAM, NACLs, Security Groups
 
-<div>
-  <img src="/assets/dev.svg" class="sm:w-1/2 mx-auto" alt="coding dev illustration">
-</div>
+### Experience
+I have worked on various projects involving cloud infrastructure, log management, and Kubernetes deployments. My experience includes setting up centralized logging, implementing scalable deployments, and optimizing cloud-based solutions.
 
-## Tech Stack
+### Certifications & Learning
+Currently preparing for AWS Certified Solution Architect and exploring different tools and technologies. Continuously learning and improving my DevOps skills to stay updated with industry trends.
 
-This theme is written in vanilla JavaScript (+ TypeScript for type checking) and a little bit of ReactJS for some interactions. TailwindCSS is used for styling; and Markdown is used for blog contents.
 
-## Features
 
-Here are certain features of this site.
+### Contact
+Feel free to connect with me on LinkedIn or GitHub!
 
-- fully responsive and accessible
-- SEO-friendly
-- light & dark mode
-- fuzzy search
-- super fast performance
-- draft posts
-- pagination
-- sitemap & rss feed
-- highly customizable
-
-If you like this theme, you can star/contribute to the [repo](https://github.com/satnaing/astro-paper).  
-Or you can even give any feedback via my [email](mailto:contact@satnaing.dev).
+- **GitHub:** https://github.com/abhizeetyadav
+- **LinkedIn:** https://www.linkedin.com/in/iamdevopsengineer/
+- **Email:** devops.abhizeet@gmail.com
