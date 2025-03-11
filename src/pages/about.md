@@ -14,7 +14,7 @@ Welcome to my About page! I am a passionate DevOps Engineer with a strong intere
 - **Automation & Scripting:** Bash, Python
 - **CI/CD Pipelines:** Jenkins, GitHub Actions, GitLab CI/CD
 - **Containerization:** Docker, Kubernetes (k3s)
-- **Cloud Platforms:** AWS (EC2, S3, CloudFormation, Lambda, CloudWatch)
+- **Cloud Platforms:** AWS 
 - **Infrastructure as Code (IaC):** Terraform, Ansible
 - **Monitoring & Logging:** Prometheus, Grafana, Loki, Fluentd, ELK Stack
 - **Version Control:** Git, AWS CodeCommit
