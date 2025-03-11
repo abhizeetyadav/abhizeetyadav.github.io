@@ -21,7 +21,10 @@ Welcome to my About page! I am a passionate DevOps Engineer with a strong intere
 - **Security & Networking:** VPC, IAM, NACLs, Security Groups
 
 ### Experience
-I have worked on various projects involving cloud infrastructure, log management, and Kubernetes deployments. My experience includes setting up centralized logging, implementing scalable deployments, and optimizing cloud-based solutions.
+- **F1Soft:**  DevOps Intern (May 2024 - Jul 2024 · 3 mos)
+- **eSewa Ltd.:** DevOps Support Trainee (Sep 2024 - Present · 7 mos)
+
+
 
 ### Certifications & Learning
 Currently preparing for AWS Certified Solution Architect and exploring different tools and technologies. Continuously learning and improving my DevOps skills to stay updated with industry trends.
