@@ -31,7 +31,7 @@ Stick around. I might just automate something amazing while you’re here!
 
 ### Experience
 - **F1Soft:**  DevOps Intern (May 2024 - Jul 2024 · 3 mos)
-- **eSewa Ltd.:**  DevOps Support Trainee (Sep 2024 - Present · 7 mos)
+- **eSewa Ltd.:**  DevOps Support Trainee (Sep 2024 - Present)
 
 
 <!-- 
