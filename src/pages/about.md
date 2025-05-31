@@ -48,6 +48,6 @@ Feel free free to connect with me on LinkedIn or GitHub!
 - **Email:** devops.abhizeet@gmail.com -->
 
 
-- <a href="https://github.com/abhizeetyadav" target="_blank">GitHub</a>  
 - <a href="https://www.linkedin.com/in/iamdevopsengineer/" target="_blank">LinkedIn</a>  
+- <a href="https://github.com/abhizeetyadav" target="_blank">GitHub</a>  
 - <a href="mailto:contact@abhizeet.com">Email</a>
