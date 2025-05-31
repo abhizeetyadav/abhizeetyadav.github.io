@@ -100,7 +100,7 @@ In most real-world projects, you’ll end up using both tools together — Compo
 
 Let's start with a simple Flask application:
 
-1. A Dockerfile using Python 3.9  
+1. A `Dockerfile` using Python 3.9  
 2. A `requirements.txt` with Flask  
 3. A basic Flask app exposing port 5000  
 
