@@ -98,7 +98,7 @@ In most real-world projects, you’ll end up using both tools together — Compo
 
 ## 🧪 Basic Usage: A Simple Flask App
 
-We start with a simple Flask application:
+Let's start with a simple Flask application:
 
 1. A Dockerfile using Python 3.9  
 2. A `requirements.txt` with Flask  
