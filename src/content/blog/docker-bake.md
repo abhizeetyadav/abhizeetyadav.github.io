@@ -1,7 +1,7 @@
 ---
 author: Abhijeet Yadav
-pubDatetime: 2025-05-31T22:13:48 NPT
-modDatetime: 2025-05-31T22:13:48 NPT
+pubDatetime: 2025-05-31T22:13:48+05:45
+modDatetime: 2025-05-31T22:13:48+05:45
 
 title: Why Docker Bake is the Smarter Way to Build Images?
 featured: false
