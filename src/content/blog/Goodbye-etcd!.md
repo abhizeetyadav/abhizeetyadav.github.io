@@ -20,7 +20,7 @@ description: Goodbye etcd! Running Kubernetes on Distributed PostgreSQL
 
 ## Table of contents
 
-What's etcd?
+What's etcd? 
 Why some are not happy about etcd?
 Kine
 
