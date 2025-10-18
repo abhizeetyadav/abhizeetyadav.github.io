@@ -3,7 +3,7 @@ author: Abhijeet Yadav
 pubDatetime:   2025-01-26T19:11:00Z
 modDatetime:  2025-01-26T19:11:00Z
 title: Goodbye etcd! Running Kubernetes on Distributed PostgreSQL?
-featured: false
+featured: true
 draft: false
 tags:
   - kine

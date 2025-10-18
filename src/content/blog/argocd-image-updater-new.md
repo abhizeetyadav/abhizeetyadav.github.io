@@ -1,109 +1,133 @@
 ---
 author: Abhijeet Yadav
-pubDatetime: 2025-05-31T22:44:00+05:45
-modDatetime: 2025-10-18T22:44:00+05:45
+pubDatetime: 2025-10-18T10:00:00+05:45
+modDatetime: 2025-10-18T10:00:00+05:45
 title: Automating Kubernetes Deployments with Argo CD Image Updater
-featured: false
+featured: true
 draft: false
 tags:
-  - kubernetes
-  - argocd
-  - devops
-  - automation
-canonicalURL: https://smale.codes/posts/argocd-image-updater/
-description: Learn how to automate Kubernetes deployments using **Argo CD Image Updater**. This guide walks you through setup, configuration, and debugging — enabling seamless, GitOps-driven image updates without manual intervention.
+  - Kubernetes
+  - Argo CD
+  - DevOps
+  - GitOps
+  - CI/CD
+canonicalURL: https://smale.codes/posts/automating-kubernetes-with-argocd-image-updater/
+description: A comprehensive step-by-step guide to automating Kubernetes deployments using Argo CD Image Updater. Learn how to configure, secure, and troubleshoot automated image updates in a production-ready GitOps workflow.
 ---
 
-## 💡 The Problem — Manual Tag Updates
+# Automating Kubernetes Deployments with Argo CD Image Updater
 
-In a traditional CI/CD pipeline:
+Modern DevOps teams strive for **speed, reliability, and automation** in their deployment pipelines.  
+In Kubernetes environments, **Argo CD** is the de-facto GitOps controller — but manually updating image tags in manifests can quickly become a bottleneck.
 
-1. Developers push code to GitHub or GitLab.
-2. A **CI pipeline** (Jenkins, GitHub Actions, etc.) builds and tags a Docker image.
-3. The new image is pushed to the registry (Docker Hub, ECR, Harbor, etc.).
-4. A **CD pipeline** updates the Kubernetes manifests (via shell scripts or manual commits).
-5. Argo CD detects the change and syncs your cluster.
-
-### ❌ The Drawback
-
-The **CD pipeline depends on the CI pipeline**.  
-If your CI job fails to push manifest updates (due to Git token or permission issues), deployments stall even when new images exist.
-
-This tight coupling is fragile in production environments.
+This post explains how to eliminate that manual step using **Argo CD Image Updater**, ensuring your deployments stay aligned with the latest container images automatically.
 
 ---
 
-## 🚀 The Solution — Argo CD Image Updater
+## Table of Contents
 
-**Argo CD Image Updater** is an official add-on that automates this process by:
-
-- Watching your image registry for new tags.
-- Updating Kubernetes manifests automatically.
-- Optionally creating Git commits or Pull Requests.
-- Triggering Argo CD to sync your cluster.
-
-✅ It **decouples CI and CD** — your cluster updates itself when new images are available.
+- [The Problem: Manual Image Tagging](#the-problem-manual-image-tagging)
+- [Introducing Argo CD Image Updater](#introducing-argo-cd-image-updater)
+- [Architecture Overview](#architecture-overview)
+- [Prerequisites](#prerequisites)
+- [Step 1: Install Argo CD](#step-1-install-argo-cd)
+- [Step 2: Create a Sample Application](#step-2-create-a-sample-application)
+- [Step 3: Register the Application](#step-3-register-the-application)
+- [Step 4: Install Image Updater](#step-4-install-image-updater)
+- [Step 5: Configure Image Update Strategy](#step-5-configure-image-update-strategy)
+- [Step 6: Configure Git Credentials](#step-6-configure-git-credentials)
+- [Step 7: Test Auto-Update](#step-7-test-auto-update)
+- [Step 8: Enable Pull Request Mode (Optional)](#step-8-enable-pull-request-mode-optional)
+- [Verification](#verification)
+- [Troubleshooting](#troubleshooting)
+- [Conclusion](#conclusion)
+- [References](#references)
 
 ---
 
-## 🏗️ Architecture Overview
+## The Problem: Manual Image Tagging
 
-Here’s how the flow looks with Image Updater:
+A typical CI/CD pipeline involves:
+1. Developer pushes code.
+2. CI builds and pushes a new Docker image.
+3. CD (or a script) updates the Kubernetes manifests with the new tag.
+4. Argo CD syncs the change into the cluster.
+
+While effective, this setup creates a **tight coupling between CI and CD**, leading to errors when:
+- Tokens expire or credentials fail.
+- Manifest updates lag behind new image pushes.
+- Multiple teams touch the same repository.
+
+This creates unnecessary friction and manual intervention.
+
+---
+
+## Introducing Argo CD Image Updater
+
+**Argo CD Image Updater** bridges this gap.  
+It continuously monitors image registries, detects new tags, and updates Kubernetes manifests automatically — maintaining a **GitOps-first deployment pipeline**.
+
+### Key Features
+- Monitors registries for new tags.
+- Updates manifests in Git automatically.
+- Supports direct commits or pull requests.
+- Works with Docker Hub, ECR, GCR, Harbor, and others.
+- Compatible with semantic versioning and digest-based strategies.
+
+---
+
+## Architecture Overview
 
 ![Argo CD Image Updater Architecture](../../../src/assets/images/argocd-image-updater.png)
 
-**Flow Summary:**
+**Workflow Summary:**
+1. CI pushes a new image tag.
+2. Argo CD Image Updater detects it.
+3. It commits the updated manifest to Git.
+4. Argo CD syncs and deploys the new version automatically.
 
-1. Developer pushes code → CI builds and pushes new image.
-2. Argo CD Image Updater detects the new tag.
-3. It commits updated image tags to the GitOps repo.
-4. Argo CD automatically syncs the change into the cluster.
-
-✅ Fully GitOps-driven  
-✅ No dependency on CI  
-✅ Reproducible, auditable deployments
+Git remains the **single source of truth**.  
+Deployments are **traceable** and **reproducible**.
 
 ---
 
-## ⚙️ Prerequisites
+## Prerequisites
 
-Before you begin, ensure you have:
+Before starting, make sure you have:
 
-- A **Kubernetes cluster** (Minikube, EKS, GKE, etc.)
-- **Argo CD** installed (`argocd` namespace)
-- **kubectl** installed and configured
-- A **GitHub repository** with your manifests
-- Optional: Docker registry credentials (for private images)
+- A running **Kubernetes cluster** (Minikube, EKS, AKS, or GKE)
+- **Argo CD** installed and accessible
+- **kubectl** configured with the correct context
+- A **GitHub repository** containing your Kubernetes manifests
+- Optional: Docker registry credentials for private images
 
 ---
 
-## 🔧 Step 1: Install Argo CD
+## Step 1: Install Argo CD
 
 ```bash
 kubectl create namespace argocd
 kubectl apply -n argocd   -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 ```
 
-Expose Argo CD externally:
+Expose the UI (optional for local environments):
 ```bash
 kubectl patch svc argocd-server -n argocd   -p '{"spec": {"type": "NodePort"}}'
 ```
 
-Get admin password:
+Retrieve admin password:
 ```bash
 kubectl -n argocd get secret argocd-initial-admin-secret   -o jsonpath="{.data.password}" | base64 -d; echo
 ```
 
-Access via:
-```
-https://<minikube-ip>:31154
-```
+Access the UI via:  
+`https://<minikube-ip>:31154`
 
 ---
 
-## 🧱 Step 2: Create a Sample Application
+## Step 2: Create a Sample Application
 
-**Deployment**
+**Deployment.yaml**
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -128,7 +152,7 @@ spec:
         - containerPort: 80
 ```
 
-**Service**
+**Service.yaml**
 ```yaml
 apiVersion: v1
 kind: Service
@@ -143,49 +167,58 @@ spec:
     targetPort: 80
 ```
 
-Commit and push these files to your GitHub repository.
+
+**kustomization.yaml**
+```yaml
+resources:
+  - deployment.yaml
+  - service.yaml
+  ```
+
+
+Commit and push to your Git repository.
 
 ---
 
-## 🧩 Step 3: Register the Application in Argo CD
+## Step 3: Register the Application
 
-In Argo CD UI → “New Application”
+In Argo CD UI:
 
-- Name: `webapp`
-- Repo URL: your Git repo
-- Path: `.`
-- Namespace: `default`
-- Sync Policy: `Automatic`
+- **Application Name:** `webapp`
+- **Project:** default
+- **Repository URL:** your Git repo
+- **Path:** `.`
+- **Cluster:** your Kubernetes cluster
+- **Namespace:** default
+- **Sync Policy:** automatic
 
-Click **Create** and watch your app deploy!
+Click **Create** → Argo CD will deploy it.
 
 ---
 
-## 🧰 Step 4: Install Argo CD Image Updater
-
-Install the official manifest:
+## Step 4: Install Image Updater
 
 ```bash
 kubectl apply -n argocd   -f https://raw.githubusercontent.com/argoproj-labs/argocd-image-updater/master/manifests/install.yaml
 ```
 
-Check pod status:
+Confirm installation:
 ```bash
 kubectl get pods -n argocd | grep image-updater
 ```
 
+![kubectl get pods -n argocd grep image-updater](../../../src/assets/images/get-pods-grep-image-updater.png)
+
 ---
 
-## ⚙️ Step 5: Configure Image Update Strategy
+## Step 5: Configure Image Update Strategy
 
 Edit your Argo CD Application annotations:
-
 ```bash
 kubectl edit app webapp -n argocd
 ```
 
-Add:
-
+Add these annotations:
 ```yaml
 metadata:
   annotations:
@@ -196,36 +229,24 @@ metadata:
 
 ---
 
-## 🔐 Step 6: Configure Git Credentials
+## Step 6: Configure Git Credentials
 
-### Option 1 — HTTPS (PAT)
+### Option 1: HTTPS (Personal Access Token)
 ```bash
 kubectl create secret generic git-credentials   -n argocd   --from-literal=username=<git-username>   --from-literal=password=<git-token>
 ```
 
-Then reference it:
-```yaml
-argocd-image-updater.argoproj.io/git-credentials=secret:argocd/git-credentials
-```
-
-### Option 2 — SSH (Recommended)
-
+### Option 2: SSH (Recommended)
 ```bash
 ssh-keygen -t ed25519 -C "argocd@yourcompany" -f /etc/argocd/keys/argocd-key
-```
-
-Add the public key as a **Deploy Key** in GitHub.  
-Then register the repo in Argo CD:
-
-```bash
 argocd repo add git@github.com:<username>/<repo>.git   --ssh-private-key-path /etc/argocd/keys/argocd-key
 ```
 
 ---
 
-## 🧪 Step 7: Test Image Auto-Update
+## Step 7: Test Auto-Update
 
-Push a new image tag:
+Push a new Docker image tag:
 ```bash
 docker tag my-web-app:v1.2 my-web-app:v1.3
 docker push my-web-app:v1.3
@@ -236,21 +257,21 @@ Tail logs:
 kubectl logs -n argocd deploy/argocd-image-updater -f
 ```
 
-### Example Log Output
+### Expected Log Snippet
 
-```text
-time="2025-10-18T09:40:03Z" level=info msg="Successfully updated image 'abhizeet/sample-flask-app:2' to 'abhizeet/sample-flask-app:3'"
-time="2025-10-18T09:44:07Z" level=info msg="Successfully committed manifest update to Git"
-time="2025-10-18T09:46:08Z" level=info msg="Found new tag v1.3 for image abhizeet/sample-flask-app"
-```
+![Argocd Image updater Log](./../../../src/assets/images/argocd-updater-logs.png)
+
+
+Refresh your Git repo — the Deployment.yaml or kustomization.yaml should now reference new version.
+
+![Kustomize taml](./../../../src/assets/images/kustomize.png)
 
 ---
 
-## 🧩 Step 8: (Optional) Enable Pull Request Mode
+## Step 8: Enable Pull Request Mode (Optional)
 
-Instead of committing directly, you can have Image Updater create PRs.
+For safer workflows, enable PR mode.
 
-Edit configmap:
 ```bash
 kubectl edit configmap argocd-image-updater-config -n argocd
 ```
@@ -264,49 +285,37 @@ git.email: "argocd-bot@yourcompany.com"
 
 ---
 
-## ✅ Verification
+## Verification
 
-Once synced, check the Argo CD UI — the new image tag should appear automatically.
+Check Argo CD UI — you should see the new image tag automatically reflected and synced.
 
-![Verify deployment in ArgoCD UI](../../../src/assets/images/verify-in-argocd-ui.png)
-
----
-
-## ⚡ Benefits
-
-| Feature | Benefit |
-|----------|----------|
-| **Automatic tag detection** | Removes need for manual manifest edits |
-| **CI/CD decoupled** | Deployments run even if CI fails |
-| **GitOps-compliant** | Every change is auditable |
-| **Multi-registry support** | Docker Hub, ECR, GCR, Harbor |
-| **PR mode support** | Safe updates for production |
+![Verify ArgoCD Deployment](../../../src/assets/images/verify-in-argocd-ui.png)
 
 ---
 
-## 🧰 Troubleshooting
+## Troubleshooting
 
-- **Repo not accessible** → Check Git credentials or SSH key.  
-- **ImagePullBackOff** → Verify registry secret in the app namespace.  
-- **Updater not committing** → Ensure write permissions or PAT scopes include `repo`.
-
----
-
-## 🏁 Conclusion
-
-With **Argo CD Image Updater**, you get a clean, automated, and production-safe deployment flow:
-
-1. CI builds and pushes images.  
-2. Image Updater detects new tags.  
-3. Git gets updated automatically.  
-4. Argo CD syncs the cluster.
-
-Goodbye manual tag edits — hello fully automated GitOps 🚀
+| Issue | Possible Cause | Solution |
+|-------|----------------|-----------|
+| **Repository not accessible** | Invalid Git credentials | Verify token or SSH key |
+| **ImagePullBackOff** | Registry authentication issue | Add imagePullSecret to deployment |
+| **Updater not committing** | Insufficient Git write access | Check token permissions (`repo:write`) |
+| **Stuck in OutOfSync** | Argo CD sync disabled | Enable auto-sync |
 
 ---
 
-### 📚 References
+## Conclusion
 
-- [Argo CD Official Docs](https://argo-cd.readthedocs.io/)
-- [Argo CD Image Updater Docs](https://argocd-image-updater.readthedocs.io/en/stable/)
-- [Kustomize Documentation](https://kubectl.docs.kubernetes.io/guides/introduction/kustomize/)
+With **Argo CD Image Updater**, your Kubernetes deployments become truly **self-updating and GitOps-compliant**.  
+By automating image tag updates and syncing directly through Git, you ensure your environments remain consistent, auditable, and production-ready.
+
+**Automation. Stability. GitOps.** — that’s the Argo way.
+
+---
+
+## References
+
+- [Argo CD Documentation](https://argo-cd.readthedocs.io/)
+- [Argo CD Image Updater](https://argocd-image-updater.readthedocs.io/en/stable/)
+- [Kustomize Docs](https://kubectl.docs.kubernetes.io/guides/introduction/kustomize/)
+- [Tutorial Reference](https://www.youtube.com/watch?v=9zic7kKh_zU&t=1504s)

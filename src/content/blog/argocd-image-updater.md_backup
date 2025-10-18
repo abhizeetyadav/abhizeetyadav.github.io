@@ -190,7 +190,7 @@ Check that the pod is running:
 ```bash
 kubectl get pods -n argocd | grep image-updater
 ```
-![kubectl get pods -n argocd | grep image-updater](./../../../src/assets/images/abhizeet-site/src/assets/images/get pods | grep image-updater.png)
+![kubectl get pods -n argocd | grep image-updater](./../../../src/assets/images/abhizeet-site/src/assets/images/get-pods-grep-image-updater.png)
 
 
 ## Step 5: Configure Image Update Strategy

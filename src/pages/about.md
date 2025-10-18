@@ -30,8 +30,11 @@ Stick around. I might just automate something amazing while you’re here!
 - **Security & Networking:** VPC, IAM, NACLs, Security Groups
 
 ### Experience
-- **F1Soft:**  DevOps Intern (May 2024 - Jul 2024 · 3 mos)
-- **eSewa Ltd.:**  Associate DevOps Engineer (Sep 2024 - Present)
+- **Nepal Clearing House Ltd:** DevOps Engineer (Oct 2025 - Present)
+- **eSewa Ltd.:**  Associate DevOps Engineer (Sep 2024 - Oct 2025)
+- **F1Soft:**  DevOps Intern (May 2024 - Jul 2024)
+
+
 
 
 <!-- 
