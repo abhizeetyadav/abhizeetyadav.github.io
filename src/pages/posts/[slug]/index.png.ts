@@ -14,7 +14,18 @@ export async function getStaticPaths() {
   }));
 }
 
-export const GET: APIRoute = async ({ props }) =>
-  new Response(await generateOgImageForPost(props as CollectionEntry<"blog">), {
-    headers: { "Content-Type": "image/png" },
-  });
+export const GET: APIRoute = async ({ props }) => {
+  if (!props || !("data" in props)) {
+    return new Response("Post not found", { status: 404 });
+  }
+
+  try {
+    const imageBuffer = await generateOgImageForPost(props as CollectionEntry<"blog">);
+    return new Response(imageBuffer, {
+      headers: { "Content-Type": "image/png" },
+    });
+  } catch (error) {
+    console.error("Failed to generate OG image:", error);
+    return new Response("Failed to generate image", { status: 500 });
+  }
+};
