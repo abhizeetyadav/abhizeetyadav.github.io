@@ -53,4 +53,4 @@ Feel free free to connect with me on LinkedIn or GitHub!
 
 - <a href="https://www.linkedin.com/in/iamdevopsengineer/" target="_blank">LinkedIn</a>  
 - <a href="https://github.com/abhizeetyadav" target="_blank">GitHub</a>  
-- <a href="mailto:ajeetusamni@gmail.com">Email</a>
+- <a href="mailto:contact@abhijeetyadav.com.np">Email</a>
