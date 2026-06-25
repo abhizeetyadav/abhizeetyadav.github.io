@@ -44,7 +44,7 @@ Currently preparing for AWS Certified Solution Architect and exploring different
 
 
 ### Contact
-Feel free free to connect with me on LinkedIn or GitHub! Hello
+Feel free free to connect with me on LinkedIn or GitHub! Hello there
 
 <!-- - **GitHub:** https://github.com/abhizeetyadav
 - **LinkedIn:** https://www.linkedin.com/in/iamdevopsengineer/
