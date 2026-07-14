@@ -1,10 +1,39 @@
-# Automating Cloudflare WAF: Blocking Unverified Bot Scanners on Basic Accounts
+---
+author: Abhijeet Yadav
+pubDatetime: 2026-07-14T15:44:47+05:45
+modDatetime: 2026-07-14T15:44:47+05:45
+
+title: Automating Cloudflare WAF - Blocking Unverified Bot Scanners on Basic Accounts
+featured: false
+draft: false
+tags:
+  - cloudflare
+  - python
+  - security
+  - devops
+  - waf
+canonicalURL: https://smale.codes/posts/automating-cloudflare-waf/
+description: How to deploy a robust, tier-aware Cloudflare WAF rule using Python to block unverified bots and scanners on basic accounts.
+---
+
+## Table of Contents
+
+- The Problem with Unverified Bots
+- Why This Script is Different
+- The Python Script
+- How to Roll It Out Safely
+
+---
+
+# The Problem with Unverified Bots
 
 If you have a public-facing endpoint, it is a guarantee that automated bots, scrapers, and vulnerability scanners are actively probing your servers. They are constantly hunting for exposed secrets—looking for `.env` files, `.git` directories, `wp-config.php`, and `docker-compose.yml` configurations. 
 
 When you are actively managing containerized environments like Docker or k3s, or running CI/CD pipelines through Jenkins, the last thing you want is junk bot traffic exhausting your server resources. Every malicious request that bypasses the edge means an unnecessary active connection hitting your backend, potentially triggering unwanted pod scaling or bogging down your PostgreSQL and Redis databases.
 
 To stop this at the edge, I wrote a Python deployment script that automatically creates and updates a Cloudflare WAF rule across all your zones. 
+
+---
 
 ## Why This Script is Different
 
@@ -16,7 +45,9 @@ There are plenty of Cloudflare API wrappers out there, but many of them fail if 
 4. **Avoids Deprecated Traps:** It completely avoids `cf.threat_score`. Many older tutorials still use this field, but it is deprecated, hardcoded to 0, and will cause your WAF rules to silently fail.
 5. **Resilient Network Logic:** Cloudflare caps the API at 1,200 requests per 5 minutes. This script implements a robust `urllib3` retry adapter with exponential backoff to handle 429 rate limits gracefully.
 
-## The Python Script
+---
+
+## 🐍 The Python Script
 
 Below is the complete deployment script. You can run it directly from your terminal or drop it into a Jupyter Notebook cell.
 
@@ -43,7 +74,7 @@ import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
-BASE_URL = "[https://api.cloudflare.com/client/v4](https://api.cloudflare.com/client/v4)"
+BASE_URL = "https://api.cloudflare.com/client/v4"
 RULE_DESCRIPTION = "Block unverified bot scanners (managed by cf_waf_deploy.py)"
 
 BAD_PATH_SIGNATURES = [
@@ -205,13 +236,38 @@ if __name__ == "__main__":
     main()
 ```
 
-## How to Roll It Out Safely
+---
+
+## 🚀 How to Roll It Out Safely
 
 When deploying WAF rules, it is always best to observe before you block. 
 
-1. **Create your API Token:** In Cloudflare, create a token with `Zone / Firewall Services / Edit` permissions.
-2. **Test Run:** Run `python3 cf_waf_deploy.py --action managed_challenge --dry-run` to see what will happen without making changes.
-3. **Challenge Mode:** Run `python3 cf_waf_deploy.py --action managed_challenge`. This puts a Captcha/JS challenge in front of suspicious requests. Check your Cloudflare Security Events dashboard after a day.
-4. **Enforce:** Once you are confident there are no false positives blocking legitimate traffic, enforce the block: `python3 cf_waf_deploy.py --action block`.
+### 1. Create your API Token
+In the Cloudflare dashboard, create a token with `Zone / Firewall Services / Edit` permissions.
 
-Keeping bots away from your edge shouldn't require enterprise budgets or brittle scripts. Give it a try and reclaim your server resources!
+### 2. Test Run
+Run this to see what will happen without making actual changes:
+```bash
+python3 cf_waf_deploy.py --action managed_challenge --dry-run
+```
+
+### 3. Challenge Mode (Recommended First Step)
+This puts a Captcha/JS challenge in front of suspicious requests. It is safe for real users.
+```bash
+python3 cf_waf_deploy.py --action managed_challenge
+```
+*Check your Cloudflare Security Events dashboard after 24 hours to review what was caught.*
+
+### 4. Enforce the Block
+Once you are confident there are no false positives blocking legitimate traffic, enforce the hard block:
+```bash
+python3 cf_waf_deploy.py --action block
+```
+
+---
+
+## 🏁 Final Thoughts
+
+Keeping bots away from your edge shouldn't require enterprise budgets or brittle scripts. Give it a try, block those unverified scanners, and reclaim your server resources!
+
+**Until next time,** **Happy automating!**
