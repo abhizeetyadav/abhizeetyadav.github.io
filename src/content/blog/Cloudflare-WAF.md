@@ -47,7 +47,7 @@ There are plenty of Cloudflare API wrappers out there, but many of them fail if 
 
 ---
 
-## 🐍 The Python Script
+##  The Python Script
 
 Below is the complete deployment script. You can run it directly from your terminal or drop it into a Jupyter Notebook cell.
 
@@ -238,7 +238,7 @@ if __name__ == "__main__":
 
 ---
 
-## 🚀 How to Roll It Out Safely
+## How to Roll It Out Safely
 
 When deploying WAF rules, it is always best to observe before you block. 
 
@@ -266,7 +266,7 @@ python3 cf_waf_deploy.py --action block
 
 ---
 
-## 🏁 Final Thoughts
+## Final Thoughts
 
 Keeping bots away from your edge shouldn't require enterprise budgets or brittle scripts. Give it a try, block those unverified scanners, and reclaim your server resources!
 
